@@ -2,13 +2,25 @@
 
 This is a repository consisting of the scripts working as analysis tools based on Machine Learning for neuroimaging data. It's for academic purpose only.
 
-## Updates on 2018.11.29:
+## Updates on 2018.12.03
+
+Refactoring - add **clf_models.py** and **rgs_models.py** to reduce the amount of code in **integrated.py**; each ***_models.py** contains the model initialization and parameter settings for grid search.
+
+In the last version there was a mistake in line 205, causing index-out-of-range error,
+```python
+list_selected_features.append(list_features[2+i])
+```
+the '2+i' was non-sense and is now 'i'.
+
+Updates also include adding LogisticRegression, LinearDiscriminantAnalysis, and KNeighborsClassifier models along with their grid search parameter settings. Moreover, f-score feature selection is also included.
+
+## Updates on 2018.11.29
 
 Committing the first version of scripts, including a integrated classification model and a integrated regression model (not completely done yet).
 
 ### Integrated classification model
 
-Since an external validation loop will results in different parameter settings, doing grid search followed by feature selection will produce different model after each iteration. Therefore, it would be a wiser choice to do a grid search first outside the validation loop inside of which feature selection will be performed, hence can we select the optimal model and obtain the corresponding selected features with larger weights, along with the mean accuracy. Should mention that most of the models are not yet configured.
+Since an external validation loop will result in different parameter settings, doing grid search followed by feature selection will produce different model after each iteration. Therefore, it would be a wiser choice to do a grid search first outside the validation loop inside of which feature selection will be performed, hence can we select the optimal model and obtain the corresponding selected features with larger weights, along with the mean accuracy. Should mention that most of the models are not yet configured.
 
 ### Integrated regression model
 

@@ -2,3 +2,4 @@ neuroenv
 .vscode
 datasets
 results
+__pycache__
