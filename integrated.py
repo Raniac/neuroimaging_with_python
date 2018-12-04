@@ -32,12 +32,14 @@ def data_acquisition(path, filename):
     :rtype list_features: list of features
     '''
     df = pd.read_csv(path+filename, encoding='gbk')
-    y = df.group # use the dot notation to select the column to predict
-    X = df.drop(['ID', 'group'], axis=1)
+    y = df.GROUP # use the dot notation to select the column to predict
+    X = df.drop(['ID', 'GROUP'], axis=1)
     list_features = list(X.columns) # get the feature list
     
     from sklearn import preprocessing
-    X = preprocessing.scale(X) # standardization with respect to mean
+    scaler = preprocessing.MinMaxScaler()
+    X = scaler.fit_transform(X)
+    # X = preprocessing.scale(X) # standardization with respect to mean
     
     return X, y, list_features
 
@@ -91,7 +93,6 @@ def clf_model_optimization(model, X, y, k, param_grid):
 
 # integrated classification model
 def integrated_clf_model(model, X, y, k, param_grid, list_features):
-    
     print('Running grid search...')
     gs_results = clf_model_optimization(model, X, y, k, param_grid)
     optimal_model = gs_results[0]
@@ -104,15 +105,33 @@ def integrated_clf_model(model, X, y, k, param_grid, list_features):
 
 # integrated regression model
 def integrated_rgs_model(model, X, y, k, param_grid, list_features):
-    pass
+    print('Running gird search...')
+    from sklearn.model_selection import GridSearchCV
+    gs = GridSearchCV(model, param_grid=param_grid, cv=k, scoring='neg_mean_absolute_error')
+    gs.fit(X, y)
+    # optimal_model = gs.best_estimator_
+    print('The best parameter setting is: ' + str(gs.best_params_))
+    print('The corresponding mae is: %.2f' % gs.best_score_)
 #/ integrated regression model
 
 # main function
 if __name__ == "__main__":
     sys.stdout = Logger('results/results_test_181129.txt')
-    path = '~/Projects/neuroimaging_with_python/datasets/'
-    filename = 'mwc1_AAL90_morph_features.csv'
+    path = '~/Projects/neuroimaging_with_python/datasets/classification/two_class/NC_SZ/'
+    filename = 'ALFF_90.csv'
+    # filename2 = 'DC_90.csv'
+    # filename3 = 'GMV_90.csv'
+    # filename4 = 'ReHo_90.csv'
+    # filename5 = 'WMV_90.csv'
     X, y, list_features = data_acquisition(path, filename)
+    # X2, y, list_features2 = data_acquisition(path, filename2)
+    # X3, y, list_features3 = data_acquisition(path, filename3)
+    # X4, y, list_features4 = data_acquisition(path, filename4)
+    # X5, y, list_features5 = data_acquisition(path, filename5)
+    # X = np.concatenate((X1, X2, X3, X4, X5), axis=1)
+    # list_features = list_features1 + list_features2 + list_features3 + list_features4 + list_features5
+    print(X.shape)
+    print(X)
     integrated_clf_model(svm_clf(), X, y, 10, param_grid_svm, list_features)
-    # integrated_rgs_model(svr_rgs(), X, y, 10, param_grid_svr, list_features)
+    # integrated_rgs_model(ols_rgs(), X, y, 10, param_grid_ols, list_features)
 #/ main function

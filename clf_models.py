@@ -7,7 +7,7 @@ def svm_clf():
     return model
 
 param_grid_svm = {
-    'C': [0.01, 1, 10, 100],
+    'C': [0.01, 0.1, 1, 10, 100],
     'kernel': ['linear']
 }
 

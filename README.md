@@ -2,6 +2,20 @@
 
 This is a repository consisting of the scripts working as analysis tools based on Machine Learning for neuroimaging data. It's for academic purpose only.
 
+## Updates on 2018.12.04
+
+### What's new
+
+- Completed the integrated_rgs_model, with neg_mean_absolute_error as performance metric. Relevance vector regression (RVR) remains to be configured;
+- Run on different datasets with 345 subjects;
+- Run on concatenated features to obtain higher accuracy.
+
+### Notice
+
+- Choose the right column to predict when using the regression models;
+- It's not yet fully automated, thus it'd be better to modify the datasets manually;
+- The accuracy is far from satisfactory, consider using different preprocessing methods.
+
 ## Updates on 2018.12.03
 
 Refactoring - add **clf_models.py** and **rgs_models.py** to reduce the amount of code in **integrated.py**; each ***_models.py** contains the model initialization and parameter settings for grid search.
