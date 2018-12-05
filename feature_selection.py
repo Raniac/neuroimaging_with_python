@@ -20,7 +20,8 @@ def RFE_CV(optimal_model, X, y, list_features):
     plt.xlabel("Number of features selected")
     plt.ylabel("Cross validation score (nb of correct classifications)")
     plt.plot(range(1, len(rfecv.grid_scores_) + 1), rfecv.grid_scores_)
-    plt.show()
+    # plt.show()
+    # plt.savefig('figure', dpi=300)
 
 def f_score_CV(optimal_model, X, y, list_features):
     print('Running f score feature selection...')

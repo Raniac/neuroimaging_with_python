@@ -2,6 +2,20 @@
 
 This is a repository consisting of the scripts working as analysis tools based on Machine Learning for neuroimaging data. It's for academic purpose only.
 
+## Updates on 2018.12.05
+
+### What's new
+
+- Separated **data_acquisition** and **model_optimization** from the original file;
+- Used the label vectors from **info.csv**, avoiding creating too many datasets;
+- Used **plt.savefig** to save figures generated.
+
+### Notice
+
+- Still no new preprocessing method used;
+- A file-to-file IO model remains to be figured out.
+
+
 ## Updates on 2018.12.04
 
 ### What's new
