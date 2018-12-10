@@ -3,7 +3,6 @@ import numpy as np
 
 WORKING_DIR = '~/Projects/neuroimaging_with_python/'
 DATASETS_DIR = WORKING_DIR + 'datasets/'
-RESULTS_DIR = WORKING_DIR + 'results/'
 
 info = pd.read_csv(DATASETS_DIR + 'info.csv', encoding='gbk')
 y_all = info.GROUP[0:345].copy() # NC vs SZ
@@ -15,8 +14,8 @@ y_g = info.G_ALL[205:345].copy() # G_ALL
 y_s = info.SCOREP1[205:345].copy() # SCOREP1
 
 # Choose the dataset to use
-PATH = DATASETS_DIR + 'classification/two_class/NC_SZ/'
-FILENAME = 'ALFF_90' # without file extension
+PATH = DATASETS_DIR + 'NC_SZ/'
+FILENAME = 'MD_90' # without file extension
 
 # Choose the corresponding y
 y = y_all
@@ -34,7 +33,12 @@ class Data():
         self.X = scaler.fit_transform(self.X)
         self.X = preprocessing.scale(self.X)
 
-    def data_split(self, k):
+    def data_split(self):
+        from sklearn.model_selection import train_test_split
+        train_X, test_X, train_y, test_y = train_test_split(self.X, self.y, random_state=0)
+        return train_X, test_X, train_y, test_y
+
+    def data_k_split(self, k):
         '''
         :type k: number of fold to split
         :rtype dict_split: dictionary containing k np.array of 
@@ -54,7 +58,7 @@ class Data():
             list_train_idx = list(train_idx) # from np.array to list
             for t1 in range(0, len(list_train_idx)):
                 num_tr = list_train_idx[t1]
-                train_X_tmp.append(list(self.X[num_tr, :]))
+                train_X_tmp.append(list(self.X.iloc[num_tr, :]))
                 train_y_tmp.append(list(self.y)[num_tr])
             dict_split['train_X_'+str(idx)] = np.array(train_X_tmp)
             dict_split['train_y_'+str(idx)] = np.array(train_y_tmp)
@@ -63,7 +67,7 @@ class Data():
             list_test_idx = list(test_idx) # from np.array to list
             for t2 in range(0, len(list_test_idx)):
                 num_ts = list_test_idx[t2]
-                test_X_tmp.append(list(self.X[num_ts, :]))
+                test_X_tmp.append(list(self.X.iloc[num_ts]))
                 test_y_tmp.append(list(self.y)[num_ts])
             dict_split['test_X_'+str(idx)] = np.array(test_X_tmp)
             dict_split['test_y_'+str(idx)] = np.array(test_y_tmp)

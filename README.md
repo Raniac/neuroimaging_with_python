@@ -2,6 +2,19 @@
 
 This is a repository consisting of the scripts working as analysis tools based on Machine Learning for neuroimaging data. It's for academic purpose only.
 
+## Updates on 2018.12.10
+
+### What's new
+
+- Defined a Data class, its attributes include data name, feature matrix, label vector and list of features, its methods consists of preprocessing and split;
+- Used ROC curve as one of the performance metrics;
+- Defined model classes, their attributes include model instance, model name and grid search parameter settings.
+
+### Notice
+
+- Feature selection methods, e.g. f-score, are not completely done;
+- ROC curves of different models are not plotted on a single figure.
+
 ## Updates on 2018.12.05
 
 ### What's new
