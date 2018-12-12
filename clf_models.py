@@ -46,7 +46,7 @@ class LR_CLF():
         self.name = 'LR'
         self.param_grid = {
             'solver': ['newton-cg', 'lbfgs', 'sag', 'saga'],
-            'multi_class': ['ovr', 'multinomial', 'auto']
+            'multi_class': ['ovr', 'multinomial']
         }
 
 class LDA_CLF():
@@ -70,7 +70,7 @@ class KNN_CLF():
         )
         self.name = 'KNN'
         self.param_grid = {
-            'n_neighbors': [5, 6, 7, 8, 9, 10],
+            'n_neighbors': [5, 7, 9],
             'algorithm': ['auto', 'ball_tree', 'kd_tree', 'brute'],
-            'p': [0, 1, 2]
+            'p': [1, 2, 3]
         }

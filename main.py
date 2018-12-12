@@ -53,9 +53,9 @@ class Logger(object):
         pass
 
 if __name__ == "__main__":
-    sys.stdout = Logger('results/NC_SZ_SVM_' + FILENAME + '_181212.txt')
+    sys.stdout = Logger('results/NC_SZ_LR_' + FILENAME + '_181212.txt')
     my_data = Data(FILENAME, X, y_all) # instantiate my data object
     my_data.data_preprocessing()
-    my_model = SVM_CLF()
+    my_model = LR_CLF()
     integrated_clf_model(my_model, my_data, 10)
     # integrated_rgs_model(l2_rgs(), my_data, 10, param_grid_l2)
