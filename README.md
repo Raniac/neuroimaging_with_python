@@ -2,6 +2,12 @@
 
 This is a repository consisting of the scripts working as analysis tools based on Machine Learning for neuroimaging data. It's for academic purpose only.
 
+## How to use it?
+
+- Change the path in the instance of **Logger** class to output results;
+- Change the **FILENAME** and the **self.X** attribute in the instance of **Data** class in **main.py** to use different datasets, or even concatenate ones;
+- Change the model class to instantiate to use different model.
+
 ## Updates on 2018.12.10
 
 ### What's new

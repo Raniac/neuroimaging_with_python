@@ -16,11 +16,14 @@ def integrated_clf_model(model, data, k):
 
     list_feature_sets = []
     accuracy = []
+    sensitivity = []
+    specificity = []
     tprs = []
     aucs = []
     mean_fpr = np.linspace(0, 1, 100)
     dict_split_data = data.data_k_split(k)
     optimal_model.probability = True
+    c = 0
     for i in range(1, k+1):
         print('iteration ' + str(i) + '...')
         train_X = dict_split_data['train_X_'+str(i)]
@@ -28,43 +31,71 @@ def integrated_clf_model(model, data, k):
         test_X = dict_split_data['test_X_'+str(i)]
         test_y = dict_split_data['test_y_'+str(i)]
 
-        print('running recursive feature elimination...')
-        from sklearn.feature_selection import RFE
-        RFE_selector = RFE(estimator=optimal_model, n_features_to_select=40, step=1)
-        RFE_selector.fit(train_X, train_y)        
-        predictions_i = RFE_selector.predict(test_X)
-        accuracy_i = 1 - sum(abs(test_y - predictions_i))/len(predictions_i)
-        print('accuracy after rfe: %.2f' % accuracy_i)
-        accuracy.append(accuracy_i)
+        # if model.name == 'SVM':
+        #     print('running recursive feature elimination...')
+        #     from sklearn.feature_selection import RFE
+        #     RFE_selector = RFE(estimator=optimal_model, n_features_to_select=150, step=1)
+        #     RFE_selector.fit(train_X, train_y)        
+        #     predictions_i = RFE_selector.predict(test_X)
 
-        print('generating selected feature list...')
-        list_selected_features_i = []
-        for i, feat in enumerate(RFE_selector.ranking_):
-            if feat == 1:
-                list_selected_features_i.append(data.list_features[i])
-        print('selected features: ' + str(list_selected_features_i))
-        list_feature_sets.append(set(list_selected_features_i))
+        #     print('generating selected feature list...')
+        #     list_selected_features_i = []
+        #     for i, feat in enumerate(RFE_selector.ranking_):
+        #         if feat == 1:
+        #             list_selected_features_i.append(data.list_features[i])
+        #     print('selected features: ' + str(list_selected_features_i))
+        #     list_feature_sets.append(set(list_selected_features_i))
 
-        print('\n')
+        #     probas_ = RFE_selector.predict_proba(test_X)
 
-        probas_ = RFE_selector.predict_proba(test_X)
+        # else:
+        print('running without rfe...')
+        optimal_model.fit(train_X, train_y)
+        predictions_i = optimal_model.predict(test_X)
+
+        if model.name in ['SVM', 'LR', 'LDA']:
+            weight_vector = optimal_model.coef_
+            print('weight vector is', weight_vector)
+
+        probas_ = optimal_model.predict_proba(test_X)
+
+        print('computing confusion matrix...')
+        from sklearn.metrics import confusion_matrix
+        tn, fp, fn, tp = confusion_matrix(test_y, predictions_i).ravel()
+        print('confusion matrix is:', (tn, fp, fn, tp))
+        cnf_accuracy = (tn + tp) / (tn + fp + fn + tp)
+        print('accuracy is: %.2f' % cnf_accuracy)
+        accuracy.append(cnf_accuracy)
+        cnf_sensitivity = tp / (tp + fn)
+        print('sensitivity is: %.2f' % cnf_sensitivity)
+        sensitivity.append(cnf_sensitivity)
+        cnf_specificity = tn / (tn + fp)
+        print('specificity is: %.2f' % cnf_specificity)
+        specificity.append(cnf_specificity)
+
         fpr, tpr, _ = roc_curve(test_y, probas_[:, 1])
         tprs.append(interp(mean_fpr, fpr, tpr))
         tprs[-1][0] = 0.0
         roc_auc = auc(fpr, tpr)
         aucs.append(roc_auc)
         plt.plot(fpr, tpr, lw=1, alpha=0.3,
-                label='ROC fold %d (AUC = %0.2f)' % (i, roc_auc))
+                label='ROC fold %d (AUC = %0.2f)' % (c, roc_auc))
 
-        i += 1
-        
+        c += 1
+        print('\n')
+
+    print('plotting mean ROC curve...')
     plt.plot([0, 1], [0, 1], linestyle='--', lw=2, color='r',
             label='Chance', alpha=.8)
 
     mean_tpr = np.mean(tprs, axis=0)
     mean_tpr[-1] = 1.0
+    print('mean fpr is:', mean_fpr)
+    print('mean tpr is:', mean_tpr)
     mean_auc = auc(mean_fpr, mean_tpr)
     std_auc = np.std(aucs)
+    print('mean auc is:', mean_auc)
+    print('std auc is:', std_auc)
     plt.plot(mean_fpr, mean_tpr, color='b',
             label=r'Mean ROC (AUC = %0.2f $\pm$ %0.2f)' % (mean_auc, std_auc),
             lw=2, alpha=.8)
@@ -81,18 +112,23 @@ def integrated_clf_model(model, data, k):
     plt.ylabel('True Positive Rate')
     plt.title('Receiver operating characteristic example')
     plt.legend(loc="lower right")
-    plt.savefig('results/' + 'ROC_curve_' + model.name + '_' + data.name + '.png', dpi=300)
+    plt.savefig('results/' + 'ROC_curve_NC_SZ_' + model.name + '_' + data.name + '.png', dpi=300)
     plt.show()
 
-    mean_accuracy = sum(accuracy)/len(accuracy)
+    mean_accuracy = sum(accuracy) / len(accuracy)
     print('Mean accuracy: %.2f' % mean_accuracy)
+    mean_sensitivity = sum(sensitivity) / len(sensitivity)
+    print('Mean sensitivity: %.2f' % mean_sensitivity)
+    mean_specificity = sum(specificity) / len(specificity)
+    print('Mean specificity: %.2f' % mean_specificity)
     
-    common_selected_features = []
-    tmp = list_feature_sets[0]
-    for set_i in list_feature_sets:
-        common_selected_features = set_i.intersection(tmp)
-        tmp = set_i
-    print('common selected features are: ' + str(common_selected_features))
+    if model.name == 'SVM':
+        common_selected_features = []
+        tmp = list_feature_sets[0]
+        for set_i in list_feature_sets:
+            common_selected_features = set_i.intersection(tmp)
+            tmp = set_i
+        print('common selected features are: ' + str(common_selected_features))
 
     # RFE_CV(optimal_model, data.X, data.y, data.list_features)
     # f_score_CV(optimal_model, X, y, list_features)

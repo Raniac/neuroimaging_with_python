@@ -7,8 +7,7 @@ class SVM_CLF():
         )
         self.name = 'SVM'
         self.param_grid = {
-            'C': [0.01, 0.1, 1, 10, 100],
-            'kernel': ['linear']
+            'C': [0.001, 0.01, 0.1, 1, 10, 100, 1000]
         }
     
     def rfe_selection(self):
@@ -66,10 +65,12 @@ class KNN_CLF():
         from sklearn.neighbors import KNeighborsClassifier
         self.model = KNeighborsClassifier(
             n_neighbors=10,
-            algorithm='auto'
+            algorithm='auto',
+            p=1
         )
         self.name = 'KNN'
         self.param_grid = {
-            'n_neighbors': [5, 10, 50],
-            'algorithm': ['auto', 'ball_tree', 'kd_tree', 'brute']
+            'n_neighbors': [5, 6, 7, 8, 9, 10],
+            'algorithm': ['auto', 'ball_tree', 'kd_tree', 'brute'],
+            'p': [0, 1, 2]
         }

@@ -1,6 +1,43 @@
 from data_acquisition import Data
-from clf_models import SVM_CLF
+from clf_models import *
 from integrated import integrated_clf_model
+
+import pandas as pd
+import numpy as np
+
+WORKING_DIR = '~/Projects/neuroimaging_with_python/'
+DATASETS_DIR = WORKING_DIR + 'datasets/'
+
+info = pd.read_csv(DATASETS_DIR + 'info.csv', encoding='gbk')
+y_all = info.GROUP[0:345].copy() # NC vs SZ
+y_all[266:345] = 1
+y_sz = info.GROUP[205:345].copy() # FE vs CH
+y_sz[y_sz == 1] = 0
+y_sz[y_sz == 2] = 1
+y_p = info.P_ALL[205:345].copy() # P_ALL
+y_p[y_p == 1] = 0
+y_p[y_p == 2] = 1
+y_n = info.N_ALL[205:345].copy() # N_ALL
+y_n[y_n == 1] = 0
+y_n[y_n == 2] = 1
+y_g = info.G_ALL[205:345].copy() # G_ALL
+y_g[y_g == 1] = 0
+y_g[y_g == 2] = 1
+y_s = info.SCOREP1[205:345].copy() # SCOREP1
+
+# Choose the dataset to use
+FILENAME1 = 'T1_246'
+X1 = pd.read_csv(DATASETS_DIR + FILENAME1 + '.csv', encoding='gbk').drop(['ID', 'GROUP'], axis=1) # NC_SZ
+# X1 = pd.read_csv(DATASETS_DIR + FILENAME1 + '.csv', encoding='gbk').drop(['ID', 'GROUP'], axis=1).iloc[205:345] # FE_CH
+FILENAME2 = 'fMRI_246'
+X2 = pd.read_csv(DATASETS_DIR + FILENAME2 + '.csv', encoding='gbk').drop(['ID', 'GROUP'], axis=1) # NC_SZ
+# X2 = pd.read_csv(DATASETS_DIR + FILENAME2 + '.csv', encoding='gbk').drop(['ID', 'GROUP'], axis=1).iloc[205:345] # FE_CH
+FILENAME3 = 'DTI_246'
+X3 = pd.read_csv(DATASETS_DIR + FILENAME3 + '.csv', encoding='gbk').drop(['ID', 'GROUP'], axis=1) # NC_SZ
+# X3 = pd.read_csv(DATASETS_DIR + FILENAME3 + '.csv', encoding='gbk').drop(['ID', 'GROUP'], axis=1).iloc[205:345] # FE_CH
+FILENAME = 'COMB'
+X = pd.concat([X1, X2, X3], axis=1)
+# X = pd.concat([X1, X2, X3], axis=1).iloc[205:345] # FE_CH
 
 import sys
 class Logger(object):
@@ -16,8 +53,9 @@ class Logger(object):
         pass
 
 if __name__ == "__main__":
-    sys.stdout = Logger('results/results_test_181129.txt') # console to file
-    my_data = Data() # instantiate my data object
-    svm_clf = SVM_CLF()
-    integrated_clf_model(svm_clf, my_data, 10)
+    sys.stdout = Logger('results/test_181211.txt')
+    my_data = Data(FILENAME, X, y_all) # instantiate my data object
+    my_data.data_preprocessing()
+    my_model = SVM_CLF()
+    integrated_clf_model(my_model, my_data, 10)
     # integrated_rgs_model(l2_rgs(), my_data, 10, param_grid_l2)
