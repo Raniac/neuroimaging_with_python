@@ -35,7 +35,7 @@ X2 = pd.read_csv(DATASETS_DIR + FILENAME2 + '.csv', encoding='gbk').drop(['ID', 
 FILENAME3 = 'DTI_246'
 X3 = pd.read_csv(DATASETS_DIR + FILENAME3 + '.csv', encoding='gbk').drop(['ID', 'GROUP'], axis=1) # NC_SZ
 # X3 = pd.read_csv(DATASETS_DIR + FILENAME3 + '.csv', encoding='gbk').drop(['ID', 'GROUP'], axis=1).iloc[205:345] # FE_CH
-FILENAME = 'COMB'
+FILENAME = 'COMB_246'
 X = pd.concat([X1, X2, X3], axis=1)
 # X = pd.concat([X1, X2, X3], axis=1).iloc[205:345] # FE_CH
 
@@ -53,7 +53,7 @@ class Logger(object):
         pass
 
 if __name__ == "__main__":
-    sys.stdout = Logger('results/test_181211.txt')
+    sys.stdout = Logger('results/NC_SZ_SVM_' + FILENAME + '_181212.txt')
     my_data = Data(FILENAME, X, y_all) # instantiate my data object
     my_data.data_preprocessing()
     my_model = SVM_CLF()
