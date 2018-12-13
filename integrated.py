@@ -97,7 +97,7 @@ def integrated_clf_model(model, data, k):
     plt.ylabel('True Positive Rate')
     plt.title('Receiver operating characteristic example')
     plt.legend(loc="lower right")
-    plt.savefig('results/' + 'ROC_curve_NC_SZ_' + model.name + '_' + data.name + '.png', dpi=300)
+    plt.savefig('results/' + 'ROC_curve_FE_CH_' + model.name + '_' + data.name + '.png', dpi=300)
     # plt.show()
 
     mean_accuracy = sum(accuracy) / len(accuracy)
@@ -116,11 +116,26 @@ def integrated_clf_model(model, data, k):
         print('The feature ranking sorted by weight is:')
         print(feature_ranking)
  
-# def integrated_rgs_model(model, data, k, param_grid):
-#     print('Running gird search...')
-#     from sklearn.model_selection import GridSearchCV
-#     gs = GridSearchCV(model, param_grid=param_grid, cv=k, scoring='neg_mean_absolute_error')
-#     gs.fit(data.X, data.y)
-#     # optimal_model = gs.best_estimator_
-#     print('The best parameter setting is: ' + str(gs.best_params_))
-#     print('The corresponding mae is: %.2f' % gs.best_score_)
+def integrated_rgs_model(model, data, k):
+    print('Running gird search...')
+    from sklearn.model_selection import GridSearchCV
+    gs = GridSearchCV(model.model, param_grid=model.param_grid, cv=k, scoring='neg_mean_absolute_error')
+    gs.fit(data.X, data.y)
+    optimal_model = gs.best_estimator_
+    print('The best parameter setting is: ' + str(gs.best_params_))
+    print('The corresponding MAE is: %.2f' % gs.best_score_)
+    
+    from sklearn.model_selection import cross_val_predict
+    predictions = cross_val_predict(optimal_model, data.X, data.y, cv=10)
+    original_predicted = pd.DataFrame({'Original': data.y, 'Predicted': predictions})
+#     print(original_predicted)
+
+    import seaborn as sns
+    import matplotlib.pyplot as plt
+    import scipy
+    pearsonr, p = scipy.stats.pearsonr(data.y, predictions)
+    print('The pearsonr and p are:', pearsonr, 'and', p)
+    g = sns.jointplot(x='Original', y='Predicted', data=original_predicted, kind='reg', label='pearsonr = %.2f, p = %.4f' % (pearsonr, p))
+    plt.legend(loc='upper right')
+    g.savefig('results/' + 'Corr_FE_CH_' + model.name + '_' + data.name + '.png', dpi=300)
+    plt.show()

@@ -1,44 +1,43 @@
-def ols_rgs():
-    from sklearn.linear_model import LinearRegression
-    model = LinearRegression()
-    return model
+class OLS_RGS():
+    def __init__(self):
+        from sklearn.linear_model import LinearRegression
+        self.model = LinearRegression()
+        self.name = 'OLS'
+        self.param_grid = {}
 
-param_grid_ols = {}
+class L1_RGS():
+    def __init__(self):
+        from sklearn.linear_model import Lasso
+        self.model = Lasso()
+        self.name = 'LASSO'
+        self.param_grid = {
+            'alpha': list(range(4, 21, 2))
+        }
 
-def l1_rgs():
-    from sklearn.linear_model import Lasso
-    model = Lasso(
-        alpha=1.0
-    )
-    return model
+class L2_RGS():
+    def __init__(self):
+        from sklearn.linear_model import Ridge
+        self.model = Ridge()
+        self.name = 'RIDGE'
+        self.param_grid = {
+            'alpha': list(range(0, 21, 2))
+        }
 
-param_grid_l1 = {
-    'alpha': [0.01, 0.1, 1.0, 10]
-}
+class SVR_RGS():
+    def __init__(self):
+        from sklearn.svm import SVR
+        self.model = SVR()
+        self.name = 'SVR'
+        self.param_grid = {
+            'C': [0.001, 0.01, 0.1, 1, 10, 100, 1000]
+        }
 
-def l2_rgs():
-    from sklearn.linear_model import Ridge
-    model = Ridge(
-        alpha=1.0
-    )
-    return model
-
-param_grid_l2 = {
-    'alpha': [0.01, 0.1, 1.0, 10]
-}
-
-def svr_rgs():
-    from sklearn.svm import SVR
-    model = SVR(
-        C=1.0,
-    )
-    return model
-
-param_grid_svr = {
-    'C': [0.01, 0.1, 1, 10, 100]
-}
-
-def rvr_rgs():
-        pass
-
-param_grid_rvr = {}
+class EN_RGS():
+    def __init__(self):
+        from sklearn.linear_model import ElasticNet
+        self.model = ElasticNet()
+        self.name = 'ElasticNet'
+        self.param_grid = {
+            'alpha': list(range(4, 21, 2)),
+            'l1_ratio': [0.1, 0.3, 0.5, 0.7, 0.9]
+        }

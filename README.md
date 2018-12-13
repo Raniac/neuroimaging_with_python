@@ -8,6 +8,14 @@ This is a repository consisting of the scripts working as analysis tools based o
 - Change the **FILENAME** and the **self.X** attribute in the instance of **Data** class in **main.py** to use different datasets, or even concatenate ones;
 - Change the model class to instantiate to use different model.
 
+## Updates on 2018.12.13
+
+### What's new
+
+- Added regression models;
+- Plotted correlations between regression predictions and original y;
+- Classification can now output feature weight vectors.
+
 ## Updates on 2018.12.10
 
 ### What's new
