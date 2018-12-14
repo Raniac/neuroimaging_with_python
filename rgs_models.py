@@ -26,7 +26,7 @@ class L2_RGS():
 class SVR_RGS():
     def __init__(self):
         from sklearn.svm import SVR
-        self.model = SVR()
+        self.model = SVR(kernel='linear')
         self.name = 'SVR'
         self.param_grid = {
             'C': [0.001, 0.01, 0.1, 1, 10, 100, 1000]

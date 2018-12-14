@@ -48,8 +48,8 @@ class Logger(object):
         pass
 
 if __name__ == "__main__":
-    sys.stdout = Logger('results/FE_CH_EN_' + FILENAME + '_181213.txt')
-    my_data = Data(FILENAME, X, y_s) # instantiate my data object
+    sys.stdout = Logger('results/FE_CH_EN_' + FILENAME1 + '_181214.txt')
+    my_data = Data(FILENAME1, X1, y_s) # instantiate my data object
     my_data.data_preprocessing()
     my_model = EN_RGS()
     # integrated_clf_model(my_model, my_data, 10)

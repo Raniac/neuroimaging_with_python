@@ -130,6 +130,13 @@ def integrated_rgs_model(model, data, k):
     original_predicted = pd.DataFrame({'Original': data.y, 'Predicted': predictions})
 #     print(original_predicted)
 
+    weight_vector = optimal_model.coef_
+    abs_weight_vector = np.abs(weight_vector)
+    feature_weight_dataframe = pd.DataFrame({'Feature': data.list_features, 'Weight': abs_weight_vector[0]})
+    feature_ranking = feature_weight_dataframe.sort_values('Weight', axis=0, ascending=False)
+    print('The feature ranking sorted by weight is:')
+    print(feature_ranking)
+
     import seaborn as sns
     import matplotlib.pyplot as plt
     import scipy
