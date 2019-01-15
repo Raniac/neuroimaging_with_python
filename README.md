@@ -8,6 +8,13 @@ This is a repository consisting of the scripts working as analysis tools based o
 - Change the **FILENAME** and the **self.X** attribute in the instance of **Data** class in **main.py** to use different datasets, or even concatenate ones;
 - Change the model class to instantiate to use different model.
 
+## Updates on 2019.01.15
+
+### What's new
+
+- Used fancy indexing to select data;
+- Output indices as list for reuse.
+
 ## Updates on 2018.12.13
 
 ### What's new
