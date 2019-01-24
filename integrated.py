@@ -1,6 +1,8 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+import time
+from datasets import panss_index
 
 def integrated_clf_model(model, data, k):
     
@@ -95,9 +97,9 @@ def integrated_clf_model(model, data, k):
     plt.ylim([-0.05, 1.05])
     plt.xlabel('False Positive Rate')
     plt.ylabel('True Positive Rate')
-    plt.title('Receiver operating characteristic example')
+    plt.title('Receiver Operating Characteristic')
     plt.legend(loc="lower right")
-    plt.savefig('results/' + 'ROC_curve_FE_CH_' + model.name + '_' + data.name + '.png', dpi=300)
+    plt.savefig('results/' + time.strftime('%y%m%d') + '_' + 'ROC_curve_' + panss_index.name + '_' + model.name + '_' + data.name + '.png', dpi=300)
     # plt.show()
 
     mean_accuracy = sum(accuracy) / len(accuracy)
@@ -128,7 +130,7 @@ def integrated_rgs_model(model, data, k):
     from sklearn.model_selection import cross_val_predict
     predictions = cross_val_predict(optimal_model, data.X, data.y, cv=10)
     original_predicted = pd.DataFrame({'Original': data.y, 'Predicted': predictions})
-#     print(original_predicted)
+    # print(original_predicted)
 
     weight_vector = optimal_model.coef_
     abs_weight_vector = np.abs(weight_vector)
@@ -144,5 +146,5 @@ def integrated_rgs_model(model, data, k):
     print('The pearsonr and p are:', pearsonr, 'and', p)
     g = sns.jointplot(x='Original', y='Predicted', data=original_predicted, kind='reg', label='pearsonr = %.2f, p = %.4f' % (pearsonr, p))
     plt.legend(loc='upper right')
-    g.savefig('results/' + 'Corr_FE_CH_' + model.name + '_' + data.name + '.png', dpi=300)
-    plt.show()
+    g.savefig('results/' + time.strftime('%y%m%d') + '_' + 'Corr_' + panss_index.name + '_' + model.name + '_' + data.name + '.png', dpi=300)
+    # plt.show()

@@ -18,10 +18,10 @@ class Logger(object):
         pass
 
 if __name__ == "__main__":
-    sys.stdout = Logger('results/test_0121.txt') # set result filename
-    my_data = Data(fMRI, X_fMRI, y_6) # instantiate my data object
+    sys.stdout = Logger('results/' + time.strftime('%y%m%d') + '_' + 'P3_SVM_fMRI_246.txt') # set result filename
+    my_data = Data(fMRI, X_fMRI, y_panss) # instantiate my data object
     my_data.data_preprocessing()
-    # my_model = SVM_CLF() # instantiate my classification model object
-    # integrated_clf_model(my_model, my_data, 10)
-    my_model = SVR_RGS() # instantiate my regression model object
-    integrated_rgs_model(my_model, my_data, 10)
+    my_model = SVM_CLF() # instantiate my classification model object
+    integrated_clf_model(my_model, my_data, 10)
+    # my_model = SVR_RGS() # instantiate my regression model object
+    # integrated_rgs_model(my_model, my_data, 10)
