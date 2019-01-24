@@ -51,29 +51,33 @@ y_3[y_3 > 4] = 1
 
 # # grouping factor 6: p3
 # to_exclude = info_panss.loc[info_panss["P3"]==3].index
-to_exclude = info_panss.loc[((info_panss["P3"]==3) | (info_panss["P3"]==4))].index
-to_exclude.tolist()
-y_6 = info_panss.drop(to_exclude, axis=0).P3[205:345].copy()
+# to_exclude = info_panss.loc[((info_panss["P3"]==3) | (info_panss["P3"]==4))].index
+# to_exclude.tolist()
+y_6 = info_panss.P3[205:345].copy()
+# y_6 = info_panss.drop(to_exclude, axis=0).P3[205:345].copy()
 # y_6[y_6 < 3] = 0
 # y_6[y_6 > 3] = 1
 # y_6[y_6 > 4] = 1
 
 
-# Choose the dataset to use
-FILENAME1 = 'T1_246'
-# X1 = pd.read_csv(DATASETS_DIR + FILENAME1 + '.csv', encoding='gbk').drop(['ID', 'GROUP'], axis=1) # NC_SZ
-# X1 = pd.read_csv(DATASETS_DIR + FILENAME1 + '.csv', encoding='gbk').drop(['ID', 'GROUP'], axis=1).iloc[205:345] # FE_CH
-X1 = pd.read_csv(DATASETS_DIR + FILENAME1 + '.csv', encoding='gbk').drop(['ID', 'GROUP'], axis=1).iloc[205:345].drop(to_exclude, axis=0) # PANSS
-FILENAME2 = 'fMRI_246'
-# X2 = pd.read_csv(DATASETS_DIR + FILENAME2 + '.csv', encoding='gbk').drop(['ID', 'GROUP'], axis=1) # NC_SZ
-# X2 = pd.read_csv(DATASETS_DIR + FILENAME2 + '.csv', encoding='gbk').drop(['ID', 'GROUP'], axis=1).iloc[205:345] # FE_CH
-X2 = pd.read_csv(DATASETS_DIR + FILENAME2 + '.csv', encoding='gbk').drop(['ID', 'GROUP'], axis=1).iloc[205:345].drop(to_exclude, axis=0) # PANSS
-# columns_X2 = X2.columns.tolist()
-# X2 = X2.drop(columns_X2[0:246], axis=1)
-# print(X2.columns)
-FILENAME3 = 'DTI_246'
-# X3 = pd.read_csv(DATASETS_DIR + FILENAME3 + '.csv', encoding='gbk').drop(['ID', 'GROUP'], axis=1) # NC_SZ
-# X3 = pd.read_csv(DATASETS_DIR + FILENAME3 + '.csv', encoding='gbk').drop(['ID', 'GROUP'], axis=1).iloc[205:345] # FE_CH
-X3 = pd.read_csv(DATASETS_DIR + FILENAME3 + '.csv', encoding='gbk').drop(['ID', 'GROUP'], axis=1).iloc[205:345].drop(to_exclude, axis=0) # PANSS
-FILENAME = 'COMB_246'
-X = pd.concat([X1, X2, X3], axis=1)
+# Choose the dataset to use.
+# T1: T1_90; T1_246. GMV; WMV.
+# fMRI: fMRI_90; fMRI_246. ALFF; DC; ReHo.
+# DTI: DTI_90; DTI_246. FA; L1; L23M; MD.
+T1 = 'T1_246'
+# X_T1 = pd.read_csv(DATASETS_DIR + T1 + '.csv', encoding='gbk').drop(['ID', 'GROUP'], axis=1) # NC_SZ
+# X_T1 = pd.read_csv(DATASETS_DIR + T1 + '.csv', encoding='gbk').drop(['ID', 'GROUP'], axis=1).iloc[205:345] # FE_CH
+X_T1 = pd.read_csv(DATASETS_DIR + T1 + '.csv', encoding='gbk').drop(['ID', 'GROUP'], axis=1).iloc[205:345].drop(to_exclude, axis=0) # PANSS
+fMRI = 'fMRI_246'
+# X_fMRI = pd.read_csv(DATASETS_DIR + fMRI + '.csv', encoding='gbk').drop(['ID', 'GROUP'], axis=1) # NC_SZ
+X_fMRI = pd.read_csv(DATASETS_DIR + fMRI + '.csv', encoding='gbk').drop(['ID', 'GROUP'], axis=1).iloc[205:345] # FE_CH
+# X_fMRI = pd.read_csv(DATASETS_DIR + fMRI + '.csv', encoding='gbk').drop(['ID', 'GROUP'], axis=1).iloc[205:345].drop(to_exclude, axis=0) # PANSS
+# columns_X_fMRI = X_fMRI.columns.tolist()
+# X_fMRI = X_fMRI.drop(columns_X_fMRI[0:246], axis=1)
+# print(X_fMRI.columns)
+DTI = 'DTI_246'
+# X_DTI = pd.read_csv(DATASETS_DIR + DTI + '.csv', encoding='gbk').drop(['ID', 'GROUP'], axis=1) # NC_SZ
+# X_DTI = pd.read_csv(DATASETS_DIR + DTI + '.csv', encoding='gbk').drop(['ID', 'GROUP'], axis=1).iloc[205:345] # FE_CH
+X_DTI = pd.read_csv(DATASETS_DIR + DTI + '.csv', encoding='gbk').drop(['ID', 'GROUP'], axis=1).iloc[205:345].drop(to_exclude, axis=0) # PANSS
+COMB = 'COMB_246'
+X_COMB = pd.concat([X_T1, X_fMRI, X_DTI], axis=1)

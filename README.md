@@ -5,8 +5,15 @@ This is a repository consisting of the scripts working as analysis tools based o
 ## How to use it?
 
 - Change the path in the instance of **Logger** class to output results;
+- Check the **datasets.py** for filename and label name or add new ones;
 - Change the **FILENAME** and the **self.X** attribute in the instance of **Data** class in **main.py** to use different datasets, or even concatenate ones;
 - Change the model class to instantiate to use different model.
+
+## Updates on 2019.01.24
+
+### What's new
+
+- A new datasets module for data and label manipulation.
 
 ## Updates on 2019.01.15
 

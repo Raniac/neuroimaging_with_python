@@ -5,3 +5,5 @@ results
 __pycache__
 report.py
 freesurfer
+test.py
+packages
